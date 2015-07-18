@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using UIKit;
 using Foundation;
@@ -9,14 +10,17 @@ namespace NoddyApp
 	{
 		public ViewController (IntPtr handle) : base (handle)
 		{
+			this.PhoneNumbers = new List<string> ();	
 		}
+
+		string translatedNumber = "";
+
+		public List<string> PhoneNumbers { get; set; }
 
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
 			// Perform any additional setup after loading the view, typically from a nib.
-
-			string translatedNumber = "";
 
 			TranslateButton.TouchUpInside += (object sender, EventArgs e) => {
 				// Convert the phone number with text to a number 
@@ -37,6 +41,9 @@ namespace NoddyApp
 			};
 
 			CallButton.TouchUpInside += (object sender, EventArgs e) => {
+
+				PhoneNumbers.Add(translatedNumber);
+
 				// Use URL handler with tel: prefix to invoke Apple's Phone app...
 				var url = new NSUrl ("tel:" + translatedNumber);
 
@@ -48,6 +55,16 @@ namespace NoddyApp
 					PresentViewController (alert, true, null);
 				}
 			};
+		}
+
+		public override void PrepareForSegue (UIStoryboardSegue segue, NSObject sender)
+		{
+			base.PrepareForSegue (segue, sender);
+
+			var callHistoryController = segue.DestinationViewController as CallHistoryController;
+			if (callHistoryController != null) {
+				callHistoryController.PhoneNumbers = this.PhoneNumbers;
+			}
 		}
 
 		public override void DidReceiveMemoryWarning ()
