@@ -55,17 +55,26 @@ namespace NoddyApp
 					PresentViewController (alert, true, null);
 				}
 			};
+
+			CallHistoryButton.TouchUpInside += (object sender, EventArgs e) =>{
+				// Launches a new instance of CallHistoryController
+				CallHistoryController callHistory = this.Storyboard.InstantiateViewController ("CallHistoryController") as CallHistoryController;
+				if (callHistory != null) {
+					callHistory.PhoneNumbers = PhoneNumbers;
+					this.NavigationController.PushViewController (callHistory, true);
+				}
+			};
 		}
 
-		public override void PrepareForSegue (UIStoryboardSegue segue, NSObject sender)
-		{
-			base.PrepareForSegue (segue, sender);
-
-			var callHistoryController = segue.DestinationViewController as CallHistoryController;
-			if (callHistoryController != null) {
-				callHistoryController.PhoneNumbers = this.PhoneNumbers;
-			}
-		}
+//		public override void PrepareForSegue (UIStoryboardSegue segue, NSObject sender)
+//		{
+//			base.PrepareForSegue (segue, sender);
+//
+//			var callHistoryController = segue.DestinationViewController as CallHistoryController;
+//			if (callHistoryController != null) {
+//				callHistoryController.PhoneNumbers = this.PhoneNumbers;
+//			}
+//		}
 
 		public override void DidReceiveMemoryWarning ()
 		{
