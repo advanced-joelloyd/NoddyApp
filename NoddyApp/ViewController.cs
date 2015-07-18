@@ -1,13 +1,19 @@
 ﻿using System;
 
 using UIKit;
+using MapKit;
 
 namespace NoddyApp
 {
 	public partial class ViewController : UIViewController
 	{
+		private MKMapView _map;
+
 		public ViewController (IntPtr handle) : base (handle)
 		{
+			_map = new MKMapView (View.Bounds);
+			_map.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
+			View.AddSubview (_map);
 		}
 
 		public override void ViewDidLoad ()
@@ -21,6 +27,8 @@ namespace NoddyApp
 			base.DidReceiveMemoryWarning ();
 			// Release any cached data, images, etc that aren't in use.
 		}
+
+
 	}
 }
 
