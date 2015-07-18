@@ -25,33 +25,42 @@ namespace NoddyApp
 
 			var documents = new FileStore(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
 			documents.AddFile ("Clean your teeth");
-
+	
 			TableView.RegisterClassForCellReuse (typeof(UITableViewCell), _fileListCellId);
-			TableView.DataSource = new FileListDataSource (documents.GetFiles().ToList(), _fileListCellId);
+			TableView.Source = new FileListDataSource (documents, _fileListCellId);
 		}
 
-		public class FileListDataSource : UITableViewDataSource
+		public class FileListDataSource : UITableViewSource
 		{
-			private readonly List<string> _files;
+			private readonly FileStore _files;
+			private List<string> _fileCache;
 			private readonly string _cellId;
 
-			public FileListDataSource (List<string> files, string cellId)
+			public FileListDataSource (FileStore files, string cellId)
 			{
 				_files = files;
 				_cellId = cellId;
+				_fileCache = _files.GetFiles().ToList();
 			}
 
 			public override UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
 			{
 				var cell = tableView.DequeueReusableCell (_cellId);
 
-				cell.TextLabel.Text = _files [indexPath.Row];
+				cell.TextLabel.Text = _fileCache [indexPath.Row];
 				return cell;
 			}
 
 			public override nint RowsInSection (UITableView tableView, nint section)
 			{
-				return _files.Count ();
+				return _fileCache.Count ();
+			}
+
+			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
+			{
+				var fileName = _fileCache [indexPath.Row];
+				new UIAlertView (fileName, _files.GetContent(fileName), null, "OK").Show();
+				tableView.DeselectRow (indexPath, true);
 			}
 		}
 	}

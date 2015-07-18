@@ -28,5 +28,10 @@ namespace NoddyApp
 			var fileName = Path.Combine(_filePath, Guid.NewGuid() + ".txt");
 			File.WriteAllText (fileName, content);
 		}
+
+		public string GetContent(string fileName)
+		{
+			return File.ReadAllText (Path.Combine (_filePath, fileName));	
+		}
 	}
 }
