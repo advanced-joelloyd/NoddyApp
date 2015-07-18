@@ -5,7 +5,8 @@ using CoreLocation;
 
 namespace NoddyApp
 {
-	public abstract class MKAnnotation : NSObject
+	[Register("MKAnnotation"), Model]
+	public abstract class MKAnnotation : NSObject, IMKAnnotation
 	{
 		public abstract CLLocationCoordinate2D Coordinate {
 			[Export("coordinate")]
