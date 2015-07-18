@@ -86,6 +86,7 @@
     <Compile Include="FileListController.designer.cs">
       <DependentUpon>FileListController.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileStore.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

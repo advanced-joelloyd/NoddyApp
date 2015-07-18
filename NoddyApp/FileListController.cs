@@ -4,6 +4,7 @@ using System.CodeDom.Compiler;
 using UIKit;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 
 namespace NoddyApp
 {
@@ -13,12 +14,7 @@ namespace NoddyApp
 
 		public FileListController (IntPtr handle) : base (handle)
 		{
-			Files = new List<string> {
-				"Wash your face",
-				"Go to bed",
-				"Clean your teeth",
-				"I said NO"
-			};
+			Files = new List<string> ();
 		}
 
 		public List<string> Files { get; set; }
@@ -27,8 +23,11 @@ namespace NoddyApp
 		{
 			base.ViewDidLoad ();
 
+			var documents = new FileStore(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+			documents.AddFile ("Clean your teeth");
+
 			TableView.RegisterClassForCellReuse (typeof(UITableViewCell), _fileListCellId);
-			TableView.DataSource = new FileListDataSource (Files, _fileListCellId);
+			TableView.DataSource = new FileListDataSource (documents.GetFiles().ToList(), _fileListCellId);
 		}
 
 		public class FileListDataSource : UITableViewDataSource
